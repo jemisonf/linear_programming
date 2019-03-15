@@ -19,44 +19,41 @@ def local_temp_solver(data):
     days = map(lambda datum: datum[0], data)
     temps = map(lambda datum: datum[1], data)
 
-    print(days)
-    print(temps)
-
     prob = LpProblem('Local Temperature Change', LpMinimize)
+    x0 = LpVariable('x0')
     x1 = LpVariable('x1')
     x2 = LpVariable('x2')
     x3 = LpVariable('x3')
     x4 = LpVariable('x4')
     x5 = LpVariable('x5')
-    x6 = LpVariable('x6')
     e = LpVariable('e')
 
     prob += e
 
     for i in range(n):
-        prob += (e >= x1 + 
-                      x2 * days[i] + 
-                      x3 * math.cos((2 * math.pi * days[i])/365.25) + 
-                      x4 * math.sin((2 * math.pi * days[i])/365.25) +
-                      x5 * math.cos((2 * math.pi * days[i])/(365.25 * 10.7)) +
-                      x6 * math.sin((2 * math.pi * days[i])/(365.25 * 10.7)) 
+        prob += (e >= x0 + 
+                      x1 * days[i] + 
+                      x2 * math.cos((2 * math.pi * days[i])/365.25) + 
+                      x3 * math.sin((2 * math.pi * days[i])/365.25) +
+                      x4 * math.cos((2 * math.pi * days[i])/(365.25 * 10.7)) +
+                      x5 * math.sin((2 * math.pi * days[i])/(365.25 * 10.7)) 
                       - temps[i] )
-        prob += (e >= -1 * x1 - 
-                      x2 * days[i] - 
-                      x3 * math.cos((2 * math.pi * days[i])/365.25) - 
-                      x4 * math.sin((2 * math.pi * days[i])/365.25) -
-                      x5 * math.cos((2 * math.pi * days[i])/(365.25 * 10.7)) -
-                      x6 * math.sin((2 * math.pi * days[i])/(365.25 * 10.7)) 
+        prob += (e >= -1 * x0 - 
+                      x1 * days[i] - 
+                      x2 * math.cos((2 * math.pi * days[i])/365.25) - 
+                      x3 * math.sin((2 * math.pi * days[i])/365.25) -
+                      x4 * math.cos((2 * math.pi * days[i])/(365.25 * 10.7)) -
+                      x5 * math.sin((2 * math.pi * days[i])/(365.25 * 10.7)) 
                       + temps[i] )
     prob.writeLP("local_temp.lp")
     prob.solve()
 
     print 'Status: ' + LpStatus[prob.status]
+    print '\tx0: ' + str(value(x0))
     print '\tx1: ' + str(value(x1))
     print '\tx2: ' + str(value(x2))
     print '\tx3: ' + str(value(x3))
     print '\tx4: ' + str(value(x4))
-    print '\tx5: ' + str(value(x5))
     print '\tx5: ' + str(value(x5))
     
 
