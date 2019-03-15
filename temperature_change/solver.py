@@ -49,6 +49,7 @@ def local_temp_solver(data):
     prob.solve()
 
     print 'Status: ' + LpStatus[prob.status]
+    print '\te: ' + str(value(e))
     print '\tx0: ' + str(value(x0))
     print '\tx1: ' + str(value(x1))
     print '\tx2: ' + str(value(x2))
